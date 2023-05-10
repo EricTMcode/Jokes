@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFAudio
 
 struct ContentView: View {
     enum JokeType: String, Codable, CaseIterable {
@@ -15,6 +16,9 @@ struct ContentView: View {
     @StateObject var jokeVM = JokeViewModel()
     @State private var showPunchline = false
     @State private var selectedJoke = JokeType.general
+    @State private var audioPlayer: AVAudioPlayer!
+    @State private var soundNumber = 0
+    let totalSounds = 25
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -62,6 +66,11 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity)
             } else {
                 Button("Show Punchline") {
+                    playSound(soundName: "\(soundNumber)")
+                    soundNumber += 1
+                    if soundNumber > totalSounds {
+                        soundNumber = 0
+                    }
                     showPunchline.toggle()
                 }
                 .buttonStyle(.borderedProminent)
@@ -98,6 +107,19 @@ struct ContentView: View {
             return "knock-knock"
         } else {
             return jokeType.rawValue
+        }
+    }
+    
+    func playSound(soundName: String) {
+        guard let soundFile = NSDataAsset(name: soundName) else {
+            print("😡 Could not read file name \(soundName)")
+            return
+        }
+        do {
+            audioPlayer = try AVAudioPlayer(data: soundFile.data)
+            audioPlayer.play()
+        } catch {
+            print("😡 ERROR: \(error.localizedDescription) creating audioPlayer.")
         }
     }
 }
