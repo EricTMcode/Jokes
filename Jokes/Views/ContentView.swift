@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var jokeVM = JokeViewModel()
+    
     var body: some View {
         VStack {
             Text("Jokes! 😜")
@@ -22,12 +24,15 @@ struct ContentView: View {
                 Text("Setup:")
                     .bold()
                     .foregroundColor(.red)
-                Text("Why does Norway Have barcodes on their battleships ? ")
+                Text(jokeVM.joke.setup)
             }
             .font(.largeTitle)
             
             Spacer()
             
+        }
+        .task {
+            await jokeVM.getData()
         }
     }
 }

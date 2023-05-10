@@ -7,9 +7,8 @@
 
 import Foundation
 
-struct Joke: Codable, Identifiable {
-    var id: Int
-    var type: String
-    var setup: String
-    var punchline: String
+struct Joke: Codable{
+    var type = ""
+    var setup = ""
+    var punchline = ""
 }
