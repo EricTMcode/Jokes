@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Joke: Codable{
+struct Joke: Codable {
     var type = ""
     var setup = ""
     var punchline = ""

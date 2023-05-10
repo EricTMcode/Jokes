@@ -23,7 +23,9 @@ class JokeViewModel: ObservableObject {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             do {
-                joke = try JSONDecoder().decode(Joke.self, from: data)
+                //                joke = try JSONDecoder().decode(Joke.self, from: data)
+                let jokes = try JSONDecoder().decode([Joke].self, from: data)
+                joke = jokes.first ?? Joke()
                 print("Setup: \(joke.setup)")
                 print("Punchline: \(joke.punchline)")
             } catch {
