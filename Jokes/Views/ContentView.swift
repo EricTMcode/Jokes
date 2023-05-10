@@ -38,6 +38,17 @@ struct ContentView: View {
             .font(.largeTitle)
             .padding(.horizontal)
             
+            Button("Get Joke") {
+                Task {
+                    await jokeVM.getData()
+                }
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.red)
+            .font(.title)
+            .bold()
+            .frame(maxWidth: .infinity)
+            
         }
         .task {
             await jokeVM.getData()
