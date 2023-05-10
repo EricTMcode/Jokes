@@ -7,25 +7,30 @@
 
 import Foundation
 
+@MainActor
 class JokeViewModel: ObservableObject {
     @Published var joke = Joke()
     
     var urlString = "https://joke.deno.dev"
     
     func getData() async {
+        print("🕸️ We are accessing the url \(urlString)")
+        
         guard let url = URL(string: urlString) else {
-            print("😡 ERROR: Could not create a URL from \(urlString)")
+            print("😡 ERROR: Could not convert \(urlString) to a URL")
             return
         }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            guard let joke = try? JSONDecoder().decode(Joke.self, from: data) else {
-                print("😡 JSON ERROR: Could not decode returned JSON data.")
-                return
+            do {
+                joke = try JSONDecoder().decode(Joke.self, from: data)
+                print("Setup: \(joke.setup)")
+                print("Punchline: \(joke.punchline)")
+            } catch {
+                print("😡 JSON ERROR: Could not decode JSON data. \(error.localizedDescription)")
             }
-            self.joke = joke
         } catch {
-            print("😡 ERROR: Could not get data from \(urlString)")
+            print("😡 ERROR: Could not get data from url \(urlString). \(error.localizedDescription)")
         }
     }
 }

@@ -11,7 +11,7 @@ struct ContentView: View {
     @StateObject var jokeVM = JokeViewModel()
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Text("Jokes! 😜")
                 .font(.largeTitle)
                 .bold()
@@ -19,16 +19,24 @@ struct ContentView: View {
                 .padding(.bottom)
                 .foregroundColor(.white)
                 .background(.red)
-
-            VStack(alignment: .leading) {
+            
+            Group {
                 Text("Setup:")
                     .bold()
                     .foregroundColor(.red)
                 Text(jokeVM.joke.setup)
+                
+                Spacer()
+                
+                Text("Punchline:")
+                    .bold()
+                    .foregroundColor(.red)
+                Text(jokeVM.joke.punchline)
+                
+                Spacer()
             }
             .font(.largeTitle)
-            
-            Spacer()
+            .padding(.horizontal)
             
         }
         .task {
