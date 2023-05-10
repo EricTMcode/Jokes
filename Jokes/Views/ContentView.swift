@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var jokeVM = JokeViewModel()
+    @State private var showPunchline = false
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -28,26 +29,40 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                Text("Punchline:")
-                    .bold()
-                    .foregroundColor(.red)
-                Text(jokeVM.joke.punchline)
+                if showPunchline {
+                    Text("Punchline:")
+                        .bold()
+                        .foregroundColor(.red)
+                    Text(jokeVM.joke.punchline)
+                }
                 
                 Spacer()
             }
             .font(.largeTitle)
             .padding(.horizontal)
             
-            Button("Get Joke") {
-                Task {
-                    await jokeVM.getData()
+            if showPunchline {
+                Button("Get Joke") {
+                    showPunchline.toggle()
+                    Task {
+                        await jokeVM.getData()
+                    }
                 }
+                .buttonStyle(.borderedProminent)
+                .tint(.red)
+                .font(.title)
+                .bold()
+                .frame(maxWidth: .infinity)
+            } else {
+                Button("Show Punchline") {
+                    showPunchline.toggle()
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.red)
+                .font(.title)
+                .bold()
+                .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.borderedProminent)
-            .tint(.red)
-            .font(.title)
-            .bold()
-            .frame(maxWidth: .infinity)
             
         }
         .task {
